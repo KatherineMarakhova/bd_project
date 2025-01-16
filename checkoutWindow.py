@@ -106,18 +106,18 @@ class CheckoutWindow(QWidget):
         self.db.connect_to_db()
         try:
             self.db.cursor.execute('BEGIN TRANSACTION')
-            self.db.cursor.execute("""
+            self.db.cursor.execute(f"""
                     UPDATE products
                     SET quantity = (
                         SELECT products.quantity - cart.quantity
                         FROM cart
                         WHERE cart.product_id = products.id
-                        AND cart.user_id = 3
+                        AND cart.user_id = {self.user_id}
                     )
                     WHERE id IN (
                         SELECT product_id 
                         FROM cart 
-                        WHERE user_id = 3
+                        WHERE user_id = {self.user_id}
                     );
                 """)
 
